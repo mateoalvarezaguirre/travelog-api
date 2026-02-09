@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Gate;
 use Laravel\Telescope\IncomingEntry;
 use Laravel\Telescope\Telescope;
 use Laravel\Telescope\TelescopeApplicationServiceProvider;
@@ -14,18 +13,20 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      */
     public function register(): void
     {
-        // Telescope::night();
+        Telescope::night();
 
         $this->hideSensitiveRequestDetails();
 
         $isLocal = $this->app->environment('local');
 
-        Telescope::filter(fn (IncomingEntry $entry) => $isLocal
-                   || $entry->isReportableException()
-                   || $entry->isFailedRequest()
-                   || $entry->isFailedJob()
-                   || $entry->isScheduledTask()
-                   || $entry->hasMonitoredTag());
+        $isEnabled = $isLocal || config('telescope.enabled', false);
+
+        Telescope::filter(fn (IncomingEntry $entry) => $isEnabled
+            || $entry->isReportableException()
+            || $entry->isFailedRequest()
+            || $entry->isFailedJob()
+            || $entry->isScheduledTask()
+            || $entry->hasMonitoredTag());
     }
 
     /**
@@ -47,14 +48,11 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
     }
 
     /**
-     * Register the Telescope gate.
-     *
-     * This gate determines who can access Telescope in non-local environments.
+     * Configure the Telescope authorization services.
      */
-    protected function gate(): void
+    #[\Override]
+    protected function authorization(): void
     {
-        Gate::define('viewTelescope', fn ($user) => in_array($user->email, [
-
-        ]));
+        Telescope::auth(fn () => true);
     }
 }
