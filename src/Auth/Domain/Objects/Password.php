@@ -1,0 +1,31 @@
+<?php
+
+namespace Src\Auth\Domain\Objects;
+
+use Illuminate\Support\Facades\Hash;
+
+class Password
+{
+    public function __construct(
+        private string $value,
+    ) {
+        if (!$this->isHashed()) {
+            $this->hash();
+        }
+    }
+
+    public function isHashed(): bool
+    {
+        return Hash::isHashed($this->value);
+    }
+
+    private function hash(): void
+    {
+        $this->value = Hash::make($this->value);
+    }
+
+    public function check(string $plainPassword): bool
+    {
+        return Hash::check($this->value, $plainPassword);
+    }
+}

@@ -29,3 +29,4 @@ cloudstoragepackage.diff
 /docker/postgres/
 *.DS_Store
 /coverage
+/.claude
