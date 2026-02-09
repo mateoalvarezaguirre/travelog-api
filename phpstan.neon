@@ -1,0 +1,48 @@
+includes:
+    - ./vendor/larastan/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - app
+        - src
+        - config
+        - database/migrations
+        - routes
+        - tests
+
+    # The level 9 is the highest level
+    level: 8
+
+    ignoreErrors:
+        - '#Unsafe usage of new static#'
+        - '#Access to an undefined property App\\Models(.*)::\$.*#'
+        - '#Access to an undefined property object::\$.*#'
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model(.*)::\$.*#'
+        - '#Call to an undefined method App\\Models(.*)::.*#'
+        - '#Call to an undefined method Illuminate\\(.*)::.*#'
+        - '#Call to an undefined method Mockery\\ExpectationInterface|Mockery\\HigherOrderMessage::withAnyArgs\(\)#'
+        - '#Call to method shouldReceive\(\) on an unknown class(.*)#'
+        - '#Call to method shouldNotHaveReceived\(\) on an unknown class(.*)#'
+        - '#Cannot access property \$(.*) on App\\Models\\(.*)#'
+        - '#(.*) constructor expects Carbon\\Carbon, Carbon\\Carbon\|false given.#'
+        - identifier: missingType.iterableValue
+
+    excludePaths:
+        - database/backup/*
+        - database/factories/*
+        - database/seeders/*
+        - bootstrap/*
+        - public/*
+        - resources/*
+        - routes/tests
+        - storage/*
+        - phpunit.xml
+
+    reportUnmatchedIgnoredErrors: false
+
+services:
+    -
+        class: App\PHPStan\Rules\UnitTestPreventDBCallsRule
+        tags:
+            - phpstan.rules.rule

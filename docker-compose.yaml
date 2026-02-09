@@ -1,0 +1,85 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      args:
+        # Asegura permisos correctos en macOS/Linux
+        PUID: ${PUID:-1000}
+        PGID: ${PGID:-1000}
+    image: laravel-php83
+    container_name: app
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      APP_DEBUG: ${APP_DEBUG:-true}
+    depends_on:
+      - mysql
+      - redis
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+      MYSQL_USER: ${DB_USERNAME:-laravel}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+
+  horizon:
+    image: laravel-php83
+    container_name: horizon
+    working_dir: /var/www/html
+    depends_on:
+      - app
+      - redis
+    volumes:
+      - ./:/var/www/html
+      - ./docker/supervisor/horizon.conf:/etc/supervisor/conf.d/horizon.conf:ro
+    command: [ "/usr/bin/supervisord", "-n" ]
+
+  scheduler:
+    image: laravel-php83
+    container_name: scheduler
+    working_dir: /var/www/html
+    depends_on:
+      - app
+    volumes:
+      - ./:/var/www/html
+      - ./docker/supervisor/scheduler.conf:/etc/supervisor/conf.d/scheduler.conf:ro
+    command: ["/usr/bin/supervisord", "-n"]
+
+  node:
+    image: node:20-alpine
+    container_name: node
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "npm install && npm run dev"
+
+volumes:
+  mysql_data:
