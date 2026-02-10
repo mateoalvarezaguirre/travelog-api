@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Trip\Domain\ValueObjects;
 
 class Engagement

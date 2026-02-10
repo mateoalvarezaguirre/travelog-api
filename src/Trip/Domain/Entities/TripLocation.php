@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Trip\Domain\Entities;
 
-class TripLocation
+readonly class TripLocation
 {
-    private string $uuid;
-
     public function __construct(
-        public readonly string $tripUuid,
-        public readonly string $locationUuid,
+        public string $tripUuid,
+        public string $locationUuid,
     ) {}
 }
