@@ -35,7 +35,6 @@ parameters:
         - bootstrap/*
         - public/*
         - resources/*
-        - routes/tests
         - storage/*
         - phpunit.xml
 

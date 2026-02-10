@@ -69,9 +69,22 @@ services:
       - "6379:6379"
     command: ["redis-server","--appendonly","yes"]
 
+  db:
+    image: mariadb:10.6
+    container_name: travelog-api-mariadb
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql:rw,delegated
+
   postgres:
     image: postgres:15-alpine
-    container_name: travelog-postgres
+    container_name: travelog-api-postgres
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USERNAME}
