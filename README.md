@@ -1,61 +1,215 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <strong>Travelog API</strong>
+</p>
+<p align="center">
+  <em>A travel journal platform backend — Laravel 12 · Hexagonal · DDD</em>
 </p>
 
-## About Laravel
+<p align="center">
+  <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-12-FF2D20?style=flat-square&logo=laravel" alt="Laravel 12"></a>
+  <a href="https://www.php.net"><img src="https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat-square&logo=php" alt="PHP 8.2+"></a>
+  <a href="https://www.postgresql.org"><img src="https://img.shields.io/badge/PostgreSQL-15-336791?style=flat-square&logo=postgresql" alt="PostgreSQL"></a>
+  <a href="https://redis.io"><img src="https://img.shields.io/badge/Redis-7-DC382D?style=flat-square&logo=redis" alt="Redis"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT"></a>
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📖 About
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Travelog API** is the backend for a **travel journal platform**. Users create trips (journals), add locations, media, and routes, follow other users, and like or comment on trips. It serves a **Next.js frontend** via a **JSON REST API** and is built with **Laravel 12**, following **Hexagonal Architecture** and **DDD** (Domain-Driven Design) with bounded contexts.
 
-## Learning Laravel
+| Feature | Description |
+|--------|-------------|
+| **Journals (Trips)** | Create, update, delete, list; draft/published/archived; public/private/unlisted |
+| **Locations & media** | Attach locations, images, routes, waypoints to trips |
+| **Social** | Follow/unfollow users, like/unlike trips, add/list comments |
+| **Profile** | View and update profile, stats, usernames |
+| **Places** | User-defined places with coordinates and marker types |
+| **Search** | Full-text search for journals, places, and users |
+| **Auth** | Email/password + Google OAuth (Sanctum) |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🏗️ Architecture
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+The codebase is split into **Laravel app** and **domain layer**:
 
-## Laravel Sponsors
+```
+├── app/                    # Laravel (Infrastructure)
+│   ├── Models/             # Eloquent models (thin, DB mapping)
+│   ├── Http/               # Middleware, base controller
+│   ├── Policies/           # Authorization
+│   └── Providers/
+│
+├── src/                    # Domain (DDD, Src\ namespace)
+│   ├── Auth/               # Authentication, registration, Google OAuth
+│   ├── Trip/               # Journals (entities, status, visibility, engagement)
+│   ├── Profile/            # User profiles, stats
+│   ├── Social/             # Follows, likes, comments
+│   ├── Place/              # User places
+│   ├── Search/             # Journals, places, users search
+│   └── Shared/             # Core value objects, pagination, exceptions
+│
+└── routes/api/             # Auth, journals, profile, social, places, search
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Each bounded context under `src/` follows **Hexagonal** layering:
 
-### Premium Partners
+- **Domain** — Entities, Value Objects, Enums, Repository interfaces, Domain exceptions  
+- **Application** — Use cases, DTOs (in/out)  
+- **Infrastructure** — Eloquent repositories, HTTP controllers, requests, resources  
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Domain and application layers are **framework-agnostic**; Laravel lives in Infrastructure. Repositories return **domain types only** (no Eloquent models or primitives). See **AGENTS.md** for full coding and architecture rules.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🛠️ Tech stack
 
-## Code of Conduct
+| Layer | Technology |
+|-------|------------|
+| **Runtime** | PHP 8.2+, Laravel 12 |
+| **API** | REST JSON, Laravel Sanctum (Bearer tokens) |
+| **Database** | PostgreSQL (prod/Docker), SQLite in-memory (tests) |
+| **Queue / cache** | Redis (prod), database (local fallback) |
+| **Server** | Laravel Octane (OpenSwoole) in Docker, Nginx reverse proxy |
+| **Queue dashboard** | Laravel Horizon |
+| **Debug** | Laravel Telescope (disabled in tests) |
+| **Quality** | PHPStan 8 (Larastan), php-cs-fixer (PSR-12 + PhpCsFixer) |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 📋 Prerequisites
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **PHP 8.2+** (extensions: `ctype`, `curl`, `dom`, `fileinfo`, `json`, `mbstring`, `openssl`, `pdo`, `tokenizer`, `xml`, `pcntl`, `redis` for Horizon)
+- **Composer**
+- **Node.js** (for Vite, optional for API-only)
+- **Docker & Docker Compose** (for full stack: app, Nginx, DB, Redis, Horizon, scheduler)
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🚀 Getting started
+
+### 1. Clone and install
+
+```bash
+git clone <repository-url>
+cd travelog-api
+cp .env.example .env
+php artisan key:generate
+composer install
+```
+
+### 2. Environment
+
+Edit `.env`:
+
+- **Local (no Docker):** `DB_CONNECTION=sqlite`, `DB_DATABASE=:memory:` or `database/database.sqlite`  
+- **Docker:** Use `DB_CONNECTION=pgsql` (or `mysql`) and set `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` to match `docker-compose` (e.g. `postgres` / `db` service).  
+- Optional: `QUEUE_CONNECTION=redis`, `REDIS_HOST=127.0.0.1` (or `redis` in Docker).  
+- Optional: `TELESCOPE_ENABLED=true` for debug UI.
+
+### 3. Database
+
+```bash
+php artisan migrate
+# Optional:
+php artisan db:seed
+```
+
+### 4. Run the app
+
+**Option A — Local (single machine)**  
+Starts HTTP server, queue worker, log tail, and Vite:
+
+```bash
+composer dev
+```
+
+API: `http://localhost:8000` (or port shown by `php artisan serve`).
+
+**Option B — Docker (full stack)**  
+Starts app (Octane), Nginx, Redis, Horizon, scheduler, and DB (MariaDB + PostgreSQL; use one):
+
+```bash
+docker compose up -d
+```
+
+API: **http://localhost:8080** (Nginx).  
+First run: run migrations (and optionally seed) inside the `app` container.
+
+---
+
+## 📡 API overview
+
+- **Base URL:** e.g. `http://localhost:8000/api` or `http://localhost:8080/api`
+- **Content type:** `application/json` (request and response)
+- **Auth:** `Authorization: Bearer <token>` for protected routes
+- **Response keys:** **camelCase** (not snake_case)
+- **Pagination:** `{ "data": [...], "meta": { "currentPage", "lastPage", "perPage", "total" } }`
+
+| Area | Endpoints (examples) |
+|------|----------------------|
+| **Health** | `GET /api/health` |
+| **Auth** | `POST /auth/login`, `POST /auth/register`, `POST /auth/google`, `POST /auth/forgot-password`, `GET /auth/me`, `POST /auth/logout` |
+| **Journals** | `GET/POST /journals`, `GET/PUT/DELETE /journals/:id`, `GET /journals/public` |
+| **Social** | `POST/DELETE /journals/:id/like`, `POST /journals/:id/comments`, `GET /journals/:id/comments`, `POST/DELETE /profile/:id/follow` |
+| **Profile** | `GET /profile/me`, `GET/PUT /profile/:username`, `GET /profile/:id/stats` |
+| **Places** | `GET/POST /places`, `DELETE /places/:id` |
+| **Search** | `GET /search/journals`, `GET /search/places`, `GET /search/users` |
+
+Full request/response shapes and status codes: **backend-api-contract.md**.
+
+---
+
+## 🧪 Testing
+
+- **Suites:** `Unit` (`tests/Unit`), `Feature` (`tests/Feature`)  
+- **DB:** SQLite in-memory (`phpunit.xml`: `DB_CONNECTION=sqlite`, `DB_DATABASE=:memory:`)
+- **Grouping:** By bounded context, e.g. `tests/Feature/{Auth,Trip,Profile,Social,Place,Shared}`, `tests/Unit/...`
+
+```bash
+composer test                    # Clear config cache + run full suite
+composer test:coverage           # With coverage (needs PCOV or Xdebug)
+php artisan test                 # Run tests directly
+php artisan test --filter=ClassName
+php artisan test --filter=test_method_name
+```
+
+Coverage target: **90%+**.
+
+---
+
+## 🔍 Code quality
+
+| Command | Description |
+|--------|-------------|
+| `composer format` | php-cs-fixer on **changed** files |
+| `composer format:all` | php-cs-fixer on **entire** project |
+| `composer analyse` | PHPStan (Larastan) on **changed** files |
+| `composer analyse:all` | PHPStan **full** project (level 8) |
+| `composer clean-code` | format + analyse (changed) |
+| `composer clean-code:all` | format + analyse (all) |
+| `composer pipeline` | format + analyse + test |
+
+- **PHPStan:** level 8, config in `phpstan.neon`  
+- **php-cs-fixer:** PSR-12, `@PhpCsFixer`, `@PHP81Migration`; test methods in `snake_case`
+
+---
+
+## 📁 Key files
+
+| File | Purpose |
+|------|--------|
+| **AGENTS.md** | Mandatory coding & code-review rules (Hexagonal, DDD, repositories, no primitives in core, etc.) |
+| **CLAUDE.md** | High-level project overview and commands for AI assistants |
+| **backend-api-contract.md** | Full API contract for the frontend (request/response shapes, status codes) |
+| **phpstan.neon** | PHPStan configuration |
+| **.php-cs-fixer.php** | Code style configuration |
+| **docker-compose.yaml** | App, Nginx, Redis, Horizon, scheduler, MariaDB, PostgreSQL |
+
+---
+
+## 📜 License
+
+This project is open-sourced under the [MIT license](https://opensource.org/licenses/MIT).
