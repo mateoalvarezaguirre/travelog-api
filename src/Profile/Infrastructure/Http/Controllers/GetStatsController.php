@@ -6,23 +6,23 @@ namespace Src\Profile\Infrastructure\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Src\Profile\Application\UseCases\GetAuthProfileUseCase;
+use Src\Profile\Application\UseCases\GetStatsUseCase;
 use Src\Profile\Domain\Exceptions\UserNotFoundExceptions;
 
-readonly class GetProfileController
+readonly class GetStatsController
 {
     public function __construct(
-        private GetAuthProfileUseCase $useCase,
+        private GetStatsUseCase $useCase,
     ) {}
 
     public function __invoke(Request $request): JsonResponse
     {
         try {
-            $profile = ($this->useCase)($request->user()->id);
+            $stats = ($this->useCase)($request->user()->id);
         } catch (UserNotFoundExceptions) {
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
 
-        return response()->json($profile->toArray());
+        return response()->json($stats->toArray());
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Profile\Infrastructure\Http\Resources;
 
 use Src\Profile\Domain\ValueObjects\User;

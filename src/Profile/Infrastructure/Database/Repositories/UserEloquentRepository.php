@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Profile\Infrastructure\Database\Repositories;
 
 use Src\Profile\Domain\Repositories\UserRepository;
@@ -37,7 +39,7 @@ class UserEloquentRepository implements UserRepository
                 $userModel->name,
                 $userModel->email,
                 $userModel->username,
-                $userModel->avatar
+                $userModel->avatar ?? ''
             );
         });
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Profile\Application\UseCases;
 
 use Src\Profile\Application\DTO\In\GetProfileDTO;

@@ -6,19 +6,19 @@ namespace Src\Profile\Infrastructure\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Src\Profile\Application\UseCases\GetAuthProfileUseCase;
+use Src\Profile\Application\UseCases\GetProfileByUsernameUseCase;
 use Src\Profile\Domain\Exceptions\UserNotFoundExceptions;
 
-readonly class GetProfileController
+readonly class GetUserByUsernameController
 {
     public function __construct(
-        private GetAuthProfileUseCase $useCase,
+        private GetProfileByUsernameUseCase $useCase,
     ) {}
 
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(Request $request, string $username): JsonResponse
     {
         try {
-            $profile = ($this->useCase)($request->user()->id);
+            $profile = ($this->useCase)($username, $request->user()->id);
         } catch (UserNotFoundExceptions) {
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }

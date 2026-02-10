@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Profile\Domain\Repositories;
 
 use Src\Profile\Domain\ValueObjects\User;
