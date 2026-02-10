@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Auth\Infrastructure\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -21,4 +23,3 @@ class ForgotPasswordRequest extends FormRequest
         ];
     }
 }
-

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Auth\Application\UseCases;
 
 use Src\Auth\Application\DTO\In\LoginDTO;

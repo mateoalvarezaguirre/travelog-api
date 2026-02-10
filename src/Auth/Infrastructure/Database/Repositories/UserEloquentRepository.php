@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Auth\Infrastructure\Database\Repositories;
 
 use App\Models\User;
@@ -47,6 +49,8 @@ class UserEloquentRepository implements UserRepository
 
             if (null === $userModel) {
                 $this->save($user);
+
+                return;
             }
 
             $user->setId($userModel->id);

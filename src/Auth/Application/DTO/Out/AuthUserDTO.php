@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Auth\Application\DTO\Out;
 
 use Src\Auth\Domain\Entities\UserEntity;

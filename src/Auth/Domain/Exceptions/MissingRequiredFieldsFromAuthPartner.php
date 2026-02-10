@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Auth\Domain\Exceptions;
 
 use Src\Shared\Core\Domain\Exceptions\BaseException;

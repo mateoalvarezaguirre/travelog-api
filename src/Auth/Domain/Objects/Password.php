@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Auth\Domain\Objects;
 
 use Illuminate\Support\Facades\Hash;

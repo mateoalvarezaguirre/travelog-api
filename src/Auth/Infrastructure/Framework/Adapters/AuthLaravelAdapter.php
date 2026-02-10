@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Auth\Infrastructure\Framework\Adapters;
 
 use App\Models\User;

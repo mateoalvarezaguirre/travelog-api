@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Auth\Infrastructure\External\Adapters;
 
 use Illuminate\Http\Client\ConnectionException;
@@ -32,10 +34,10 @@ class GoogleAuthExternalAdapter implements GoogleManagement
         }
 
         $payload  = $response->json();
-        $googleId = $payload['sub']   ?? null;
-        $email    = $payload['email']    ?? null;
-        $name     = $payload['name']      ?? 'Google User';
-        $userName = $payload['email'] ?? Str::slug($name) . '-' . Str::random(5);
+        $googleId = $payload['sub']     ?? null;
+        $email    = $payload['email']   ?? null;
+        $name     = $payload['name']    ?? 'Google User';
+        $userName = $payload['email']   ?? Str::slug($name) . '-' . Str::random(5);
         $avatar   = $payload['picture'] ?? null;
 
         if (! $googleId || ! $email) {

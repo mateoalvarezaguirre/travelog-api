@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Auth\Infrastructure\Http\Resources;
 
 use Src\Auth\Application\DTO\Out\AuthUserDTO;
@@ -14,10 +16,11 @@ readonly class AuthUserResource implements \JsonSerializable
     {
         return [
             'user' => [
+                'id'       => $this->authUser->user->getId(),
                 'name'     => $this->authUser->user->name,
                 'email'    => $this->authUser->user->email,
                 'username' => $this->authUser->user->username,
-                'avatar'   => $this->authUser->user->avatar->url,
+                'avatar'   => $this->authUser->user->avatar?->url,
             ],
             'token' => $this->authUser->authToken->value,
         ];

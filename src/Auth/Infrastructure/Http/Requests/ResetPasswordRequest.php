@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Src\Auth\Infrastructure\Http\Requests;
 
-use Src\Auth\Application\DTO\In\LoginDTO;
 use Src\Shared\Core\Infrastructure\Requests\BaseFormRequest;
 
-class LoginRequest extends BaseFormRequest
+class ResetPasswordRequest extends BaseFormRequest
 {
     /**
      * @return array<string, array<int, string>>
@@ -15,16 +14,9 @@ class LoginRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
+            'token'    => ['required', 'string'],
             'email'    => ['required', 'email'],
-            'password' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
-    }
-
-    public function dto(): LoginDTO
-    {
-        return new LoginDTO(
-            email: $this->input('email'),
-            password: $this->input('password'),
-        );
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Auth\Infrastructure\Http\Requests;
 
 use Src\Auth\Application\DTO\In\RegisterDTO;

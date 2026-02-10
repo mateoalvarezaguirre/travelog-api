@@ -4,27 +4,18 @@ declare(strict_types=1);
 
 namespace Src\Auth\Infrastructure\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Src\Auth\Application\UseCases\ForgotPasswordUseCase;
-use Src\Auth\Application\UseCases\GetMeUseCase;
 use Src\Auth\Infrastructure\Http\Requests\ForgotPasswordRequest;
 
-class AuthController extends Controller
+readonly class ForgotPasswordController
 {
     public function __construct(
-        private readonly GetMeUseCase $getMeUseCase,
-        private readonly ForgotPasswordUseCase $forgotPasswordUseCase,
+        private ForgotPasswordUseCase $forgotPasswordUseCase,
     ) {}
 
-    public function me(Request $request): JsonResponse
-    {
-        return response()->json(($this->getMeUseCase)($request->user()));
-    }
-
-    public function forgotPassword(ForgotPasswordRequest $request): JsonResponse
+    public function __invoke(ForgotPasswordRequest $request): JsonResponse
     {
         $result = ($this->forgotPasswordUseCase)($request->input('email'));
 

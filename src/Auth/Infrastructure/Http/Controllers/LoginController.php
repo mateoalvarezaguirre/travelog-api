@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Auth\Infrastructure\Http\Controllers;
 
 use Src\Auth\Application\UseCases\LoginUseCase;
