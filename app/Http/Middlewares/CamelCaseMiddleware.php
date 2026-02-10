@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middlewares;
 
 use Closure;
@@ -36,7 +38,7 @@ class CamelCaseMiddleware
         $result = [];
 
         foreach ($data as $key => $value) {
-            $newKey = is_string($key) ? $transformer($key) : $key;
+            $newKey          = is_string($key) ? $transformer($key) : $key;
             $result[$newKey] = is_array($value) ? $this->transformKeys($value, $transformer) : $value;
         }
 
@@ -46,6 +48,6 @@ class CamelCaseMiddleware
     private function isJsonResponse(Response $response): bool
     {
         return $response instanceof JsonResponse
-            || str_contains($response->headers->get('Content-Type', ''), 'application/json');
+            || str_contains((string) $response->headers->get('Content-Type', ''), 'application/json');
     }
 }

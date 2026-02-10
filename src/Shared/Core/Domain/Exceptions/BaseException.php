@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Shared\Core\Domain\Exceptions;
 
 use Illuminate\Http\JsonResponse;
@@ -10,7 +12,7 @@ class BaseException extends \Exception
         private string $errorCode,
         private int $statusCode,
         private ?array $extraParams = null
-    ){
+    ) {
         parent::__construct(
             $this->translate($this->errorCode),
             $this->statusCode
@@ -20,7 +22,7 @@ class BaseException extends \Exception
     public function render(): JsonResponse
     {
         $response = [
-            'code' => $this->getErrorCode(),
+            'code'    => $this->getErrorCode(),
             'message' => $this->getMessage(),
         ];
 

@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Shared\Core\Domain\ValueObjects;
 
 readonly class PaginationResult
 {
     public function __construct(
         private array $items,
-        private int   $currentPage,
-        private int   $lastPage,
-        private int   $perPage,
-        private int   $total,
+        private int $currentPage,
+        private int $lastPage,
+        private int $perPage,
+        private int $total,
     ) {}
 
     public function getItems(): array
@@ -41,9 +43,9 @@ readonly class PaginationResult
     {
         return [
             'currentPage' => $this->currentPage,
-            'lastPage' => $this->lastPage,
-            'perPage' => $this->perPage,
-            'total' => $this->total,
+            'lastPage'    => $this->lastPage,
+            'perPage'     => $this->perPage,
+            'total'       => $this->total,
         ];
     }
 }
