@@ -6,4 +6,5 @@ return [
 
     // Context Providers
     App\Providers\Contexts\AuthServiceProvider::class,
+    App\Providers\Contexts\ProfileServiceProvider::class,
 ];

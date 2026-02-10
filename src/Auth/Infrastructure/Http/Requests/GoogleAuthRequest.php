@@ -2,15 +2,11 @@
 
 namespace Src\Auth\Infrastructure\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Src\Auth\Application\DTO\In\GoogleAuthDTO;
+use Src\Shared\Core\Infrastructure\Requests\BaseFormRequest;
 
-class GoogleAuthRequest extends FormRequest
+class GoogleAuthRequest extends BaseFormRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     /**
      * @return array<string, array<int, string>>
      */
@@ -20,5 +16,11 @@ class GoogleAuthRequest extends FormRequest
             'id_token' => ['required', 'string'],
         ];
     }
-}
 
+    public function dto(): GoogleAuthDTO
+    {
+        return new GoogleAuthDTO(
+            googleId: $this->input('id_token'),
+        );
+    }
+}

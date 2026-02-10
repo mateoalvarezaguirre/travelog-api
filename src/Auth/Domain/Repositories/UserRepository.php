@@ -3,13 +3,13 @@
 namespace Src\Auth\Domain\Repositories;
 
 use Src\Auth\Domain\Entities\UserEntity;
-use Src\Auth\Domain\ValueObjects\GoogleId;
+use Src\Shared\Core\Domain\ValueObjects\Email;
 
 interface UserRepository
 {
-    public function create(UserEntity $user): void;
+    public function save(UserEntity $user): void;
 
-    public function findByGoogleId(GoogleId $googleId): ?UserEntity;
+    public function saveByEmail(UserEntity $user): void;
 
-    public function findByEmail(string $email): ?UserEntity;
+    public function findByEmail(Email $email): ?UserEntity;
 }

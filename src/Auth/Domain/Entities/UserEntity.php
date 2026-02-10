@@ -5,6 +5,7 @@ namespace Src\Auth\Domain\Entities;
 use Src\Auth\Domain\Objects\Password;
 use Src\Auth\Domain\ValueObjects\Avatar;
 use Src\Auth\Domain\ValueObjects\GoogleId;
+use Src\Shared\Core\Domain\ValueObjects\Email;
 
 class UserEntity
 {
@@ -12,13 +13,13 @@ class UserEntity
 
     public function __construct(
         public readonly string $name,
-        public readonly string $email,
+        public readonly Email $email,
         public readonly Password $password,
         public readonly string $username,
         public readonly ?GoogleId $googleId = null,
         public readonly ?Avatar $avatar = null,
         public readonly bool $emailVerified = false,
-    ){}
+    ) {}
 
     public function getId(): int
     {

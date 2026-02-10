@@ -2,17 +2,18 @@
 
 namespace Src\Auth\Infrastructure\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use Src\Auth\Application\UseCases\LoginUseCase;
 use Src\Auth\Domain\Contracts\AuthManagement;
 use Src\Auth\Domain\Exceptions\InvalidCredentialsException;
+use Src\Auth\Domain\Repositories\UserRepository;
 use Src\Auth\Infrastructure\Http\Requests\LoginRequest;
 use Src\Auth\Infrastructure\Http\Resources\AuthUserResource;
 
 readonly class LoginController
 {
     public function __construct(
-        private AuthManagement $authManagement
+        private AuthManagement $authManagement,
+        private UserRepository $repository,
     ) {}
 
     /**
@@ -22,7 +23,8 @@ readonly class LoginController
     {
         $useCase = new LoginUseCase(
             $request->dto(),
-            $this->authManagement
+            $this->authManagement,
+            $this->repository
         );
 
         $authUser = $useCase();

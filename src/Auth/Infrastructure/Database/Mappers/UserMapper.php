@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Auth\Infrastructure\Framework\Mappers;
+namespace Src\Auth\Infrastructure\Database\Mappers;
 
 use App\Models\User;
 use Src\Auth\Domain\Entities\UserEntity;

@@ -9,9 +9,14 @@ class Password
     public function __construct(
         private string $value,
     ) {
-        if (!$this->isHashed()) {
+        if (! $this->isHashed()) {
             $this->hash();
         }
+    }
+
+    public function getHash(): string
+    {
+        return $this->value;
     }
 
     public function isHashed(): bool
@@ -19,13 +24,13 @@ class Password
         return Hash::isHashed($this->value);
     }
 
-    private function hash(): void
-    {
-        $this->value = Hash::make($this->value);
-    }
-
     public function check(string $plainPassword): bool
     {
         return Hash::check($this->value, $plainPassword);
+    }
+
+    private function hash(): void
+    {
+        $this->value = Hash::make($this->value);
     }
 }

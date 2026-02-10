@@ -6,32 +6,31 @@ use Src\Auth\Application\DTO\In\LoginDTO;
 use Src\Auth\Application\DTO\Out\AuthUserDTO;
 use Src\Auth\Domain\Contracts\AuthManagement;
 use Src\Auth\Domain\Exceptions\InvalidCredentialsException;
-use Src\Auth\Domain\ValueObjects\Credentials;
+use Src\Auth\Domain\Repositories\UserRepository;
+use Src\Shared\Core\Domain\ValueObjects\Email;
 
 readonly class LoginUseCase
 {
     public function __construct(
-        private LoginDTO $loginDTO,
-        private AuthManagement $authManagement
-    ){}
+        private LoginDTO $dto,
+        private AuthManagement $authManagement,
+        private UserRepository $repository,
+    ) {}
 
     /**
      * @throws InvalidCredentialsException
      */
     public function __invoke(): AuthUserDTO
     {
-        $credentials = new Credentials(
-            email: $this->loginDTO->email,
-            password: $this->loginDTO->password
+        $authUser = $this->repository->findByEmail(
+            email: new Email($this->dto->email)
         );
 
-        if (!$this->authManagement->attempt($credentials)) {
+        if (! $authUser || ! $authUser->password->check($this->dto->password)) {
             throw new InvalidCredentialsException();
         }
 
-        $authUser = $this->authManagement->getAuthUser();
-
-        $authToken = $this->authManagement->getAuthToken();
+        $authToken = $this->authManagement->getAuthToken($authUser);
 
         return new AuthUserDTO(
             user: $authUser,

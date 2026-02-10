@@ -10,5 +10,5 @@ readonly class AuthUserDTO
     public function __construct(
         public UserEntity $user,
         public AuthToken $authToken,
-    ){}
+    ) {}
 }
