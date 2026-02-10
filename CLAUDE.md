@@ -17,11 +17,12 @@ composer dev                  # Run app server, queue worker, log tail, and vite
 ### Testing
 ```bash
 composer test                 # Clear config cache then run full test suite
+composer test:coverage        # Run tests with code coverage (requires PCOV or Xdebug)
 php artisan test              # Run tests directly
 php artisan test --filter=ClassName  # Run a single test class
 php artisan test --filter=test_method_name  # Run a single test method
 ```
-Tests use SQLite in-memory (`DB_CONNECTION=sqlite`, `DB_DATABASE=:memory:` set in phpunit.xml). Test suites: `Unit` (tests/Unit) and `Feature` (tests/Feature).
+Tests use SQLite in-memory (`DB_CONNECTION=sqlite`, `DB_DATABASE=:memory:` set in phpunit.xml). Test suites: `Unit` (tests/Unit) and `Feature` (tests/Feature). Tests are grouped by bounded context: `tests/Feature/{Auth,Trip,Profile,Social,Place,Shared}/*Test.php` and `tests/Unit/{Auth,Trip,Profile,Social,Place}/*Test.php`. Coverage target: 90%+ (run `composer test:coverage` with PCOV or Xdebug enabled).
 
 ### Static Analysis & Formatting
 ```bash
@@ -77,3 +78,7 @@ PostgreSQL in production (via Docker). Key tables: `users`, `trips` (UUID PK), `
 - **PHPStan level 8** with larastan. Config in `phpstan.neon`. Analyses `app/`, `src/`, `config/`, `database/migrations/`, `routes/`, `tests/`.
 - **php-cs-fixer** with PSR-12 base + `@PhpCsFixer` + `@PHP81Migration`. Config in `.php-cs-fixer.php`. Key rules: single quotes, `snake_case` test method names (`php_unit_method_casing`), aligned binary operators, no yoda conditions, trailing commas in multiline.
 - Test method names must be `snake_case` (enforced by php-cs-fixer).
+
+## Agents rules
+
+- The agents rules are in AGENTS.md. Please follow those rules when working with the code in this repository.
